@@ -1,0 +1,1 @@
+void init_icmp_sock(PeerConfig *peerConfig);

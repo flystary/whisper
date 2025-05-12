@@ -1,0 +1,50 @@
+cmake_minimum_required(VERSION 3.8)
+
+PROJECT(whisper-server)
+
+set(VERSION_NUMBER 1.0.0)
+
+SET(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")
+SET(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")
+SET(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS -g)
+SET(CMAKE_BUILD_TYPE "Debug")
+SET(SOURCE_FILES ${DIR_SRCS})
+
+SET(ROOTFS /data/devlop_660/flexbuild_lsdk2108/build/rfs/rootfs_lsdk2108_ubuntu_main_arm64)
+SET(SVXROOT /data/devlop_660/flexbuild_lsdk2108/jenkins/svxnetworks)
+
+INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES(${ROOTFS}/usr/include)
+INCLUDE_DIRECTORIES(${ROOTFS}/usr/include/aarch64-linux-gnu)
+INCLUDE_DIRECTORIES(${SVXROOT}/include)
+
+link_directories(${ROOTFS}/usr/lib)
+link_directories(${ROOTFS}/usr/lib/aarch64-linux-gnu)
+link_directories(${ROOTFS}/usr/local/lib)
+link_directories(${ROOTFS}/usr/local/lib/aarch64-linux-gnu)
+link_directories(${SVXROOT}/lib)
+
+
+string(TIMESTAMP COMPILE_TIME ${VERSION_NUMBER}_%Y%m%d%H%M%S)
+set(build_time ${COMPILE_TIME})
+configure_file(
+        ${PROJECT_SOURCE_DIR}/include/version_config.h.in
+        ${PROJECT_SOURCE_DIR}/include/version_config.h
+)
+
+
+AUX_SOURCE_DIRECTORY(src DIR_SRCS)
+
+add_compile_options(-fpermissive)
+
+add_executable(${PROJECT_NAME} ${DIR_SRCS})
+
+target_link_libraries(${PROJECT_NAME}
+        -llog4cpp
+        -lconfig++
+        -ljsoncpp
+        -luv
+        -lip4tc
+        -lxtables
+        )

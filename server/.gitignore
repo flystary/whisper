@@ -1,0 +1,6 @@
+.idea
+cmake-build-debug
+cmake-build-release
+
+include/version_config.h
+/cmake-build-debugwhisper_server.log
